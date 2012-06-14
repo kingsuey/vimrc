@@ -4,9 +4,11 @@
 
 " read https://github.com/vgod/vimrc/blob/master/README.md for more info
 
+" set language first
+set langmenu=en_US.UTF-8
+let $LANG='en.US'
 
 " For pathogen.vim: auto load all plugins in .vim/bundle
-
 let g:pathogen_disabled = []
 if !has('gui_running')
    call add(g:pathogen_disabled, 'powerline')
@@ -39,15 +41,15 @@ syntax on		" syntax highlight
 set hlsearch		" search highlighting
 
 if has("gui_running")	" GUI color and font settings
-  set guifont=Osaka-Mono:h20
-  set background=dark 
+  " set guifont=Osaka-Mono:h20
+  set background=dark
   set t_Co=256          " 256 color mode
   set cursorline        " highlight current line
   colors moria
   highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
 else
 " terminal color settings
-  colors vgod
+  colors elflord
 endif
 
 set clipboard=unnamed	" yank to the system register (*) by default
@@ -75,8 +77,9 @@ set tm=500
 
 " TAB setting{
    set expandtab        "replace <TAB> with spaces
-   set softtabstop=3 
-   set shiftwidth=3 
+   set tabstop=4
+   set softtabstop=4
+   set shiftwidth=4
 
    au FileType Makefile set noexpandtab
 "}      							
@@ -132,7 +135,7 @@ let g:mapleader=","
 map <leader>r :call Replace()<CR>
 
 " open the error console
-map <leader>cc :botright cope<CR> 
+map <leader>e :botright cope<CR>
 " move to next error
 map <leader>] :cn<CR>
 " move to the prev error
@@ -153,10 +156,10 @@ set wmh=0                     " set the min height of a window to 0 so we can ma
 
 " move around tabs. conflict with the original screen top/bottom
 " comment them out if you want the original H/L
-" go to prev tab 
-map <S-H> gT
+" go to prev tab
+" map <S-H> gT
 " go to next tab
-map <S-L> gt
+" map <S-L> gt
 
 " new tab
 map <C-t><C-t> :tabnew<CR>
@@ -326,7 +329,6 @@ let g:tagbar_autofocus = 1
 
 " --- PowerLine
 " let g:Powerline_symbols = 'fancy' " require fontpatcher
-"
 
 " --- SnipMate
 let g:snipMateAllowMatchingDot = 0
@@ -336,3 +338,75 @@ au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw! " recompile c
 
 " --- vim-gitgutter
 let g:gitgutter_enabled = 1
+
+function! Dos2Unix()
+    :update
+    :set ff=unix
+    :w
+endfunction
+
+nnoremap <leader>u :call Dos2Unix()<CR>
+
+nnoremap <leader>c I//<ESC>
+set hidden
+
+" Trim trailing white spaces
+nnoremap <leader>t :%s/\s\+$//<ESC>
+" source $VIMRUNTIME/vimrc_example.vim
+" included in example.vim
+" set nocompatible
+" disable windows behave
+" source $VIMRUNTIME/mswin.vim
+
+
+if has("gui_running")	" GUI color and font settings
+  language messages en
+  " remove menu bar, toolbar and scroll bar
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  " set key shortcut for toggling menu bar, toolbar and scroll bar
+  nnoremap <C-F1> :if &go=~#'m'<Bar>set go-=m<Bar>else<Bar>set go+=m<Bar>endif<CR>
+  nnoremap <C-F2> :if &go=~#'T'<Bar>set go-=T<Bar>else<Bar>set go+=T<Bar>endif<CR>
+  nnoremap <C-F3> :if &go=~#'r'<Bar>set go-=r<Bar>else<Bar>set go+=r<Bar>endif<CR>
+  " Maximize window when starting up
+  set lines=999 columns=999
+  " set font
+  set guifont=Consolas:h12
+  set guifontwide=MingLiU:h12 "For windows to display mixed character sets
+endif
+
+set diffexpr=MyDiff()
+function! MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+function! ReadCmdMsg(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  tabnew
+  silent put=message
+  set nomodified
+endfunction
+command! -nargs=+ -complete=command ReadCmdMsg call ReadCmdMsg(<q-args>)
