@@ -341,7 +341,13 @@ let g:gitgutter_enabled = 1
 
 function! Dos2Unix()
     :update
-    :set ff=unix
+    :e ++ff=dos
+    :setlocal ff=unix
+    :w
+endfunction
+function! Unix2Dos()
+    :update
+    :e ++ff=dos
     :w
 endfunction
 
@@ -353,9 +359,6 @@ set hidden
 " Trim trailing white spaces
 nnoremap <leader>t :%s/\s\+$//<ESC>
 " source $VIMRUNTIME/vimrc_example.vim
-" included in example.vim
-" set nocompatible
-" disable windows behave
 " source $VIMRUNTIME/mswin.vim
 
 
