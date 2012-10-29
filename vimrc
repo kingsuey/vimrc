@@ -24,6 +24,7 @@ set bs=2		" allow backspacing over everything in insert mode
 set history=50		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set autoread		" auto read when file is changed from outside
+set number              " show line number
 
 
 filetype off          " necessary to make ftdetect work on Linux
@@ -34,8 +35,8 @@ filetype plugin on    " Enable filetype-specific plugins
 
 
 " auto reload vimrc when editing it
-autocmd! bufwritepost .vimrc source ~/.vimrc
-
+"autocmd! bufwritepost $VIM/vimfiles/vimrc source $VIM/vimfiles/vimrc
+autocmd! bufwritepost _vimrc source $HOME\_vimrc
 
 syntax on		" syntax highlight
 set hlsearch		" search highlighting
@@ -207,7 +208,7 @@ cmap cd. lcd %:p:h
 "--------------------------------------------------------------------------- 
 
 " Ctrl-[ jump out of the tag stack (undo Ctrl-])
-map <C-[> <ESC>:po<CR>
+" map <C-[> <ESC>:po<CR>
 
 " ,g generates the header guard
 map <leader>g :call IncludeGuard()<CR>
@@ -250,7 +251,7 @@ autocmd BufNewFile,BufRead *.sass             set ft=sass.css
 set encoding=utf-8                                  
 set termencoding=utf-8
 set fileencoding=utf-8
-set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
+set fileencodings=ucs-bom,utf-8,cp936,gb2312,big5,latin1
 
 fun! ViewUTF8()
 	set encoding=utf-8                                  
@@ -358,9 +359,26 @@ set hidden
 
 " Trim trailing white spaces
 nnoremap <leader>t :%s/\s\+$//<ESC>
-" source $VIMRUNTIME/vimrc_example.vim
-" source $VIMRUNTIME/mswin.vim
 
+function! FindUnmatch()
+    :%s/<br><br>/\r/g
+    :g/\<Freezing\>/d
+    :v/\<NOT\> Match/d
+    /\((-\?\d\+\.\d\).*\1
+endfunction
+
+nnoremap <leader>s :call FindUnmatch()<CR>
+
+nnoremap <leader>p :let @" = expand("%:p")<CR>
+
+" count match of last search pattern
+nnoremap <leader>n :%s///gn<CR>
+
+" build tags for PHP file
+nnoremap <leader>b :!ctags -R --exclude=.git --exclude=.svn --tag-relative=yes --PHP-kinds=+cf-v 
+            \ --regex-PHP='/abstract\s+class\s+\([^ ]+\)/\1/c/' 
+            \ --regex-PHP='/interface\s+([^ ]+)/\1/c/' .<CR>
+            " \ --regex-PHP='/(public\|static\|abstract\|protected\|private\)\s+function\s+\&?\s*([^ (]+)/\2/f/' .<CR>
 
 if has("gui_running")	" GUI color and font settings
   language messages en
