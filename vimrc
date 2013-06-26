@@ -13,6 +13,7 @@ let g:pathogen_disabled = []
 if !has('gui_running')
    call add(g:pathogen_disabled, 'powerline')
 endif
+call add(g:pathogen_disabled, 'vim-gitgutter')
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
