@@ -34,7 +34,7 @@ filetype plugin on    " Enable filetype-specific plugins
 
 " auto reload vimrc when editing it
 "autocmd! bufwritepost $VIM/vimfiles/vimrc source $VIM/vimfiles/vimrc
-autocmd! bufwritepost _vimrc source $HOME\_vimrc
+autocmd! bufwritepost .vimrc source $HOME/.vimrc
 
 syntax on		" syntax highlight
 set hlsearch		" search highlighting
@@ -355,14 +355,7 @@ set hidden
 " Trim trailing white spaces
 nnoremap <leader>t :%s/\s\+$//<ESC>
 
-function! FindUnmatch()
-    :%s/<br><br>/\r/g
-    :g/\<Freezing\>/d
-    :v/\<NOT\> Match/d
-    /\((-\?\d\+\.\d\).*\1
-endfunction
-
-nnoremap <leader>s :call FindUnmatch()<CR>
+nnoremap <leader>s :NERDTreeToggle<CR>
 
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
