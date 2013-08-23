@@ -27,6 +27,8 @@ set autoread		" auto read when file is changed from outside
 set number              " show line number
 
 
+filetype off          " necessary to make ftdetect work on Linux
+syntax on
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
@@ -334,6 +336,11 @@ let g:tagbar_sort = 1
 " --- SnipMate
 let g:snipMateAllowMatchingDot = 0
 
+" --- coffee-script
+au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw! " recompile coffee scripts on write
+
+" --- vim-gitgutter
+let g:gitgutter_enabled = 1
 
 function! Dos2Unix()
     :update
