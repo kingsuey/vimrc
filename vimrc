@@ -381,7 +381,7 @@ nnoremap <leader>b :!ctags -R --exclude=.git --exclude=.svn --tag-relative=yes -
             " \ --regex-PHP='/(public\|static\|abstract\|protected\|private\)\s+function\s+\&?\s*([^ (]+)/\2/f/' .<CR>
 
 if has("gui_running")	" GUI color and font settings
-  language messages en
+  language messages en_US
   " remove menu bar, toolbar and scroll bar
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
@@ -394,7 +394,7 @@ if has("gui_running")	" GUI color and font settings
   set lines=999 columns=999
   " set font
   set guifont=Consolas:h12
-  set guifontwide=MingLiU:h12 "For windows to display mixed character sets
+  " set guifontwide=MingLiU:h12 "For windows to display mixed character sets
 endif
 
 set diffexpr=MyDiff()
