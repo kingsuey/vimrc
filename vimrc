@@ -27,14 +27,15 @@ set autoread		" auto read when file is changed from outside
 set number              " show line number
 
 
+filetype off          " necessary to make ftdetect work on Linux
+syntax on
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
 
 
 " auto reload vimrc when editing it
-"autocmd! bufwritepost $VIM/vimfiles/vimrc source $VIM/vimfiles/vimrc
-autocmd! bufwritepost _vimrc source $HOME\_vimrc
+autocmd! bufwritepost .vimrc source $HOME/.vimrc
 
 syntax on		" syntax highlight
 set hlsearch		" search highlighting
@@ -325,6 +326,8 @@ hi link EasyMotionShade  Comment
 nnoremap <silent> <F7> :TagbarToggle<CR> 
 " set focus to TagBar when opening it
 let g:tagbar_autofocus = 1
+let g:tagbar_autoclose = 1
+let g:tagbar_sort = 1
 
 " --- PowerLine
 " let g:Powerline_symbols = 'fancy' " require fontpatcher
@@ -332,6 +335,11 @@ let g:tagbar_autofocus = 1
 " --- SnipMate
 let g:snipMateAllowMatchingDot = 0
 
+" --- coffee-script
+au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw! " recompile coffee scripts on write
+
+" --- vim-gitgutter
+let g:gitgutter_enabled = 1
 
 function! Dos2Unix()
     :update
