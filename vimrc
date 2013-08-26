@@ -371,6 +371,13 @@ endfunction
 
 nnoremap <leader>s :call FindUnmatch()<CR>
 
+
+nnoremap <leader>s :NERDTreeToggle<CR>
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+" Use the same symbols as TextMate for tabstops and EOLs
+set listchars=tab:▸\ ,eol:¬
 nnoremap <leader>p :let @" = expand("%:p")<CR>
 
 " count match of last search pattern
