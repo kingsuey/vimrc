@@ -397,6 +397,7 @@ if has("gui_running")	" GUI color and font settings
   " set guifontwide=MingLiU:h12 "For windows to display mixed character sets
 endif
 
+au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 set diffexpr=MyDiff()
 function! MyDiff()
   let opt = '-a --binary '
